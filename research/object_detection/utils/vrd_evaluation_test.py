@@ -14,8 +14,12 @@
 # ==============================================================================
 """Tests for tensorflow_models.object_detection.utils.vrd_evaluation."""
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from object_detection.core import standard_fields
 from object_detection.utils import vrd_evaluation
@@ -39,7 +43,7 @@ class VRDRelationDetectionEvaluatorTest(tf.test.TestCase):
                 groundtruth_box_tuples1,
             standard_fields.InputDataFields.groundtruth_classes:
                 groundtruth_class_tuples1,
-            standard_fields.InputDataFields.verified_labels:
+            standard_fields.InputDataFields.groundtruth_image_classes:
                 groundtruth_verified_labels1
         })
 
@@ -71,11 +75,12 @@ class VRDRelationDetectionEvaluatorTest(tf.test.TestCase):
 
     image_key = 'img1'
     detected_box_tuples = np.array(
-        [([0, 0.3, 1, 1], [1.1, 1, 2, 2]), ([0, 0, 1, 1], [1, 1, 2, 2])],
+        [([0, 0.3, 1, 1], [1.1, 1, 2, 2]), ([0, 0, 1, 1], [1, 1, 2, 2]),
+         ([0.5, 0, 1, 1], [1, 1, 3, 3])],
         dtype=vrd_evaluation.vrd_box_data_type)
     detected_class_tuples = np.array(
-        [(1, 2, 5), (1, 2, 3)], dtype=vrd_evaluation.label_data_type)
-    detected_scores = np.array([0.7, 0.8], dtype=float)
+        [(1, 2, 5), (1, 2, 3), (1, 6, 3)], dtype=vrd_evaluation.label_data_type)
+    detected_scores = np.array([0.7, 0.8, 0.9], dtype=float)
     self.vrd_eval.add_single_detected_image_info(
         image_key, {
             standard_fields.DetectionResultFields.detection_boxes:
@@ -121,7 +126,7 @@ class VRDPhraseDetectionEvaluatorTest(tf.test.TestCase):
                 groundtruth_box_tuples1,
             standard_fields.InputDataFields.groundtruth_classes:
                 groundtruth_class_tuples1,
-            standard_fields.InputDataFields.verified_labels:
+            standard_fields.InputDataFields.groundtruth_image_classes:
                 groundtruth_verified_labels1
         })
 
@@ -154,11 +159,12 @@ class VRDPhraseDetectionEvaluatorTest(tf.test.TestCase):
     image_key = 'img1'
     detected_box_tuples = np.array(
         [([0, 0.3, 0.5, 0.5], [0.3, 0.3, 1.0, 1.0]),
-         ([0, 0, 1.2, 1.2], [0.0, 0.0, 2.0, 2.0])],
+         ([0, 0, 1.2, 1.2], [0.0, 0.0, 2.0, 2.0]),
+         ([0.5, 0, 1, 1], [1, 1, 3, 3])],
         dtype=vrd_evaluation.vrd_box_data_type)
     detected_class_tuples = np.array(
-        [(1, 2, 5), (1, 2, 3)], dtype=vrd_evaluation.label_data_type)
-    detected_scores = np.array([0.7, 0.8], dtype=float)
+        [(1, 2, 5), (1, 2, 3), (1, 6, 3)], dtype=vrd_evaluation.label_data_type)
+    detected_scores = np.array([0.7, 0.8, 0.9], dtype=float)
     self.vrd_eval.add_single_detected_image_info(
         image_key, {
             standard_fields.DetectionResultFields.detection_boxes:
